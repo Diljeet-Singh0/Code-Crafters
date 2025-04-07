@@ -1,4 +1,4 @@
-      import React, { useState } from "react";
+import React, { useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import PptxGenJS from "pptxgenjs";
@@ -27,10 +27,13 @@ function App() {
 
   // 📌 Generate Poster (Screenshot of HTML)
   const generatePoster = () => {
-    html2canvas(document.body).then((canvas) => {
+    const element = document.getElementById("poster-content"); // Capture specific content only
+    html2canvas(element, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
-      pdf.addImage(imgData, "PNG", 10, 10, 180, 160);
+      const pdf = new jsPDF("p", "mm", "a4"); // A4 size for better quality
+      const imgWidth = 190; // Fit within A4 width
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
       pdf.save("poster.pdf");
     });
   };
@@ -55,26 +58,37 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="App flex gap-4 flex-col items-center justify-center h-screen bg-gray-100">
       <h1>One Source Documentation</h1>
-      <input
-        type="text"
-        placeholder="Enter Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <textarea
-        placeholder="Enter Content"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
-      <button onClick={generatePDF}>Generate PDF Report</button>
-      <button onClick={generatePPTX}>Generate PPTX Presentation</button>
-      <button onClick={generatePoster}>Generate Poster</button>
-      <button onClick={generateExcel}>Generate Excel File</button>
-      <button onClick={generateJSON}>Export as JSON</button>
+
+      <div id="poster-content" className="flex flex-col gap-2 bg-white p-4 rounded shadow-md">
+        <input
+          type="text"
+          placeholder="Enter Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="border p-2 w-full"
+        />
+        <textarea
+          placeholder="Enter Content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          className="border p-2 w-full"
+        />
+      </div>
+
+      {/* 📌 All buttons are back! */}
+      <div className="flex gap-2">
+        <button onClick={generatePDF} className="bg-blue-500 text-white px-4 py-2 rounded">Generate PDF</button>
+        <button onClick={generatePPTX} className="bg-green-500 text-white px-4 py-2 rounded">Generate PPTX</button>
+        <button onClick={generatePoster} className="bg-yellow-500 text-white px-4 py-2 rounded">Generate Poster</button>
+        <button onClick={generateExcel} className="bg-purple-500 text-white px-4 py-2 rounded">Generate Excel</button>
+        <button onClick={generateJSON} className="bg-red-500 text-white px-4 py-2 rounded">Export as JSON</button>
+      </div>
     </div>
   );
+
+
 }
 
 export default App;
