@@ -5,7 +5,7 @@ import PptxGenJS from "pptxgenjs";
 import * as XLSX from "xlsx";
 
 function App() {
-  const [title, setTitle] = useState("");
+
   const [content, setContent] = useState("");
   const [name, setName] = useState("");
   const [branch, setBranch] = useState("");
@@ -27,6 +27,7 @@ function App() {
   // 📌 Generate PDF Report
   const generatePDF = () => {
     const doc = new jsPDF();
+<<<<<<< HEAD
     doc.setFontSize(20);
     doc.text("Guru Nanak Dev Engineering College", 20, 20);
     doc.setFontSize(12);
@@ -41,11 +42,48 @@ function App() {
     doc.save("report.pdf");
   };
 
+=======
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(24);
+    doc.text("Student Documentation", 50, 15);
+
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Personal Details", 20, 30);
+    doc.setDrawColor(0);
+    doc.setFillColor(230, 230, 230); // Light Gray Background
+    doc.rect(18, 32, 170, 20, "F");
+
+    doc.setFont("helvetica", "normal");
+    doc.text(`Name: ${name}`, 25, 40);
+    doc.text(`Branch: ${branch}`, 25, 50);
+    doc.text(`Year: ${year}`, 100, 40);
+    doc.text(`CRN: ${crn}`, 100, 50);
+    doc.text(`URN: ${urn}`, 25, 60);
+
+    doc.setFont("helvetica", "bold");
+
+    doc.setFont("helvetica", "normal");
+
+
+    doc.setFont("helvetica", "bold");
+    doc.text("Content", 20, 105);
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(content, 25, 115, { maxWidth: 160 });
+
+    doc.save("styled_report.pdf");
+  };
+
+
+
+>>>>>>> a56ad2a564e731780e9deb4cd089ee1558c660df
   // 📌 Generate PPTX Presentation
   const generatePPTX = () => {
     let pptx = new PptxGenJS();
     let slide = pptx.addSlide();
 
+<<<<<<< HEAD
     slide.addText("Guru Nanak Dev Engineering College", { x: 0.5, y: 0.5, fontSize: 24, bold: true });
     slide.addText(`Name: ${name}`, { x: 0.5, y: 1, fontSize: 18 });
     slide.addText(`Branch: ${branch}`, { x: 0.5, y: 1.5, fontSize: 18 });
@@ -54,6 +92,14 @@ function App() {
     slide.addText(`URN: ${urn}`, { x: 0.5, y: 3, fontSize: 18 });
     slide.addText(`Title: ${title}`, { x: 0.5, y: 3.5, fontSize: 20, bold: true });
     slide.addText(content, { x: 0.5, y: 4, fontSize: 16, wrap: true });
+=======
+    slide.addText(`Name: ${name}`, { x: 0.5, y: 0.5, fontSize: 18 });
+    slide.addText(`Branch: ${branch}`, { x: 0.5, y: 1, fontSize: 18 });
+    slide.addText(`Year: ${year}`, { x: 0.5, y: 1.5, fontSize: 18 });
+    slide.addText(`CRN: ${crn}`, { x: 0.5, y: 2, fontSize: 18 });
+    slide.addText(`URN: ${urn}`, { x: 0.5, y: 2.5, fontSize: 18 });
+    slide.addText(content, { x: 0.5, y: 3.5, fontSize: 16, wrap: true });
+>>>>>>> a56ad2a564e731780e9deb4cd089ee1558c660df
 
     pptx.writeFile("presentation.pptx");
   };
@@ -89,12 +135,12 @@ function App() {
   const generateExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet([
       {
+
         Name: name,
         Branch: branch,
         Year: year,
         CRN: crn,
         URN: urn,
-        Title: title,
         Content: content
       }
     ]);
@@ -106,11 +152,16 @@ function App() {
   // 📌 Generate JSON File
   const generateJSON = () => {
     const jsonData = {
+<<<<<<< HEAD
       name branch,
+=======
+
+      name,
+      branch,
+>>>>>>> a56ad2a564e731780e9deb4cd089ee1558c660df
       year,
       crn,
       urn,
-      title,
       content
     };
     const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: "application/json" });
@@ -126,6 +177,7 @@ function App() {
       <h1 className="text-2xl font-bold">One Source Documentation</h1>
 
       {/* Input Section */}
+<<<<<<< HEAD
       <div id="poster-content" className="flex flex-col gap-2 bg-white p-4 rounded shadow-md w-96 border-2 border-gray-300">
         <input
           type="text"
@@ -134,6 +186,10 @@ function App() {
           onChange={(e) => setTitle(e.target.value)}
           className="border p-2 w-full"
         />
+=======
+      <div id="poster-content" className="flex flex-col gap-2 bg-white p-4 rounded shadow-md w-96">
+
+>>>>>>> a56ad2a564e731780e9deb4cd089ee1558c660df
         <input
           type="text"
           placeholder="Enter Name"
