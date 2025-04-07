@@ -22,7 +22,7 @@ function App() {
     setURN("");
   };
 
-  // 📌 Generate PDF Report
+  //  Generate PDF Report
   const generatePDF = () => {
     const doc = new jsPDF();
     doc.setFont("helvetica", "bold");
@@ -31,26 +31,44 @@ function App() {
 
     doc.setFontSize(14);
     doc.text("Personal Details", 20, 30);
+
+    //  Background for Personal Details
     doc.setFillColor(230, 230, 230);
-    doc.rect(18, 32, 170, 20, "F");
+    doc.rect(18, 32, 170, 50, "F");
 
     doc.setFont("helvetica", "normal");
     doc.text(`Name: ${name}`, 25, 40);
     doc.text(`Branch: ${branch}`, 25, 50);
     doc.text(`Year: ${year}`, 100, 40);
     doc.text(`CRN: ${crn}`, 100, 50);
-    doc.text(`URN: ${urn}`, 25, 60);
+    doc.text(`URN: ${urn}`, 25, 65);
 
+    //  Heading "Content" (No Background)
     doc.setFont("helvetica", "bold");
-    doc.text("Content", 20, 90);
+    doc.text("Content", 20, 95);
+
+    //  Calculate Content Box Height Based on Text Length
     doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
-    doc.text(content, 25, 100, { maxWidth: 160 });
 
-    doc.save("styled_report.pdf");
+    const contentStartY = 100; // Start just below heading
+    const maxWidth = 160;
+    const lineHeight = 6; // Approx line height
+    const contentLines = doc.splitTextToSize(content, maxWidth);
+    const contentHeight = contentLines.length * lineHeight;
+
+    // Background for Content Text (Darker Shade)
+    doc.setFillColor(240, 240, 240);
+    doc.rect(18, contentStartY - 3, 170, contentHeight + 6, "F");
+
+    //  Add Content Text Over Background
+    doc.text(contentLines, 25, contentStartY);
+
+    doc.save("report.pdf");
   };
 
-  // 📌 Generate PPTX Presentation
+
+  //  Generate PPTX Presentation
   const generatePPTX = () => {
     let pptx = new PptxGenJS();
     let slide = pptx.addSlide();
@@ -73,7 +91,7 @@ function App() {
     pptx.writeFile("styled_presentation.pptx");
   };
 
-  // 📌 Generate Poster (Screenshot of HTML)
+  //  Generate Poster (Screenshot of HTML)
   const generatePoster = () => {
     const element = document.getElementById("poster-content");
 
@@ -87,7 +105,7 @@ function App() {
     });
   };
 
-  // 📌 Generate Excel File
+  //  Generate Excel File
   const generateExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet([
       { Name: name, Branch: branch, Year: year, CRN: crn, URN: urn, Content: content }
@@ -97,7 +115,7 @@ function App() {
     XLSX.writeFile(workbook, "data.xlsx");
   };
 
-  // 📌 Generate JSON File
+  //  Generate JSON File
   const generateJSON = () => {
     const jsonData = { name, branch, year, crn, urn, content };
     const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: "application/json" });
