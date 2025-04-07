@@ -5,7 +5,7 @@ import PptxGenJS from "pptxgenjs";
 import * as XLSX from "xlsx";
 
 function App() {
-  const [title, setTitle] = useState("");
+
   const [content, setContent] = useState("");
   const [name, setName] = useState("");
   const [branch, setBranch] = useState("");
@@ -16,24 +16,45 @@ function App() {
   // 📌 Generate PDF Report
   const generatePDF = () => {
     const doc = new jsPDF();
-    doc.text(`Title: ${title}`, 20, 70);
-    doc.text(`Name: ${name}`, 20, 20);
-    doc.text(`Branch: ${branch}`, 20, 30);
-    doc.text(`Year: ${year}`, 20, 40);
-    doc.text(`CRN: ${crn}`, 20, 50);
-    doc.text(`URN: ${urn}`, 20, 60);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(24);
+    doc.text("Student Documentation", 50, 15);
 
-    doc.text("Content:", 20, 80);
-    doc.text(content, 20, 90, { maxWidth: 170 });
-    doc.save("report.pdf");
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Personal Details", 20, 30);
+    doc.setDrawColor(0);
+    doc.setFillColor(230, 230, 230); // Light Gray Background
+    doc.rect(18, 32, 170, 20, "F");
+
+    doc.setFont("helvetica", "normal");
+    doc.text(`Name: ${name}`, 25, 40);
+    doc.text(`Branch: ${branch}`, 25, 50);
+    doc.text(`Year: ${year}`, 100, 40);
+    doc.text(`CRN: ${crn}`, 100, 50);
+    doc.text(`URN: ${urn}`, 25, 60);
+
+    doc.setFont("helvetica", "bold");
+
+    doc.setFont("helvetica", "normal");
+
+
+    doc.setFont("helvetica", "bold");
+    doc.text("Content", 20, 105);
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(content, 25, 115, { maxWidth: 160 });
+
+    doc.save("styled_report.pdf");
   };
+
 
 
   // 📌 Generate PPTX Presentation
   const generatePPTX = () => {
     let pptx = new PptxGenJS();
     let slide = pptx.addSlide();
-    slide.addText(`Title: ${title}`, { x: 0.5, y: 3, fontSize: 20, bold: true });
+
     slide.addText(`Name: ${name}`, { x: 0.5, y: 0.5, fontSize: 18 });
     slide.addText(`Branch: ${branch}`, { x: 0.5, y: 1, fontSize: 18 });
     slide.addText(`Year: ${year}`, { x: 0.5, y: 1.5, fontSize: 18 });
@@ -61,7 +82,7 @@ function App() {
   const generateExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet([
       {
-        Title: title,
+
         Name: name,
         Branch: branch,
         Year: year,
@@ -79,7 +100,7 @@ function App() {
   // 📌 Generate JSON File
   const generateJSON = () => {
     const jsonData = {
-      title,
+
       name,
       branch,
       year,
@@ -102,13 +123,7 @@ function App() {
 
       {/* Input Section */}
       <div id="poster-content" className="flex flex-col gap-2 bg-white p-4 rounded shadow-md w-96">
-        <input
-          type="text"
-          placeholder="Enter Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 w-full"
-        />
+
         <input
           type="text"
           placeholder="Enter Name"
