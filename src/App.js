@@ -189,7 +189,7 @@ function App() {
 
     <div className="App flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 gap-4">
       <LogoCard />
-      <h1 className="text-3xl font-bold text-gray-600">One Source Documentation</h1>
+      <h1 className="text-3xl font-bold text-gray-600 p-8 ">One Source Documentation</h1>
 
       {/* Input Section */}
       <div id="poster-content" className="flex flex-col gap-2 bg-white p-4 rounded shadow-md w-96 border-2 border-gray-300">
