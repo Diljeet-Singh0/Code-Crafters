@@ -3,6 +3,9 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import PptxGenJS from "pptxgenjs";
 import * as XLSX from "xlsx";
+// const [invalidCRN, setInvalidCRN] = useState(false);
+// const [invalidYear, setInvalidYear] = useState(false);
+// const [invalidURN, setInvalidURN] = useState(false);
 
 function App() {
   const [content, setContent] = useState("");
@@ -68,29 +71,81 @@ function App() {
   };
 
 
-  //  Generate PPTX Presentation
+
   const generatePPTX = () => {
     let pptx = new PptxGenJS();
-    let slide = pptx.addSlide();
-
-    slide.addText("Student Documentation", {
-      x: 1, y: 0.5, fontSize: 28, bold: true, color: "003366"
+  
+    // --- Slide 1: Student Info ---
+    let slide1 = pptx.addSlide();
+  
+    // Slide Title
+    slide1.addText("Student Documentation", {
+      x: 1,
+      y: 0.5,
+      fontSize: 28,
+      bold: true,
+      color: "003366",
     });
-
-    slide.addText(
-      `Name: ${name}\nBranch: ${branch}\nYear: ${year}\nCRN: ${crn}\nURN: ${urn}`,
-      { x: 1, y: 1.5, fontSize: 18, lineSpacing: 30, color: "222222" }
-    );
-
-    slide.addShape(pptx.ShapeType.rect, {
-      x: 0.5, y: 3.5, w: 8, h: 0.3, fill: { color: "003366" }
+  
+    // Blue box background for student info
+    slide1.addShape(pptx.ShapeType.rect, {
+      x: 0.8,
+      y: 1.3,
+      w: 8.4,
+      h: 3.2,
+      fill: { color: "D9EAFB" }, // light blue
+      roundRadius: 10,
+      shadow: { type: "outer", color: "888888", blur: 3, offset: 2 },
     });
-
-    slide.addText(content, { x: 1, y: 4.5, fontSize: 16, wrap: true, color: "666666" });
-
+  
+    // Student Info Text
+    const studentInfo = `Name: ${name}\n\nBranch: ${branch}\n\nYear: ${year}\n\nCRN: ${crn}\n\nURN: ${urn}`;
+    slide1.addText(studentInfo, {
+      x: 1.2,
+      y: 1.5,
+      fontSize: 18,
+      color: "000000",
+      lineSpacing: 20,
+      w: 7.5,
+      h: 3,
+    });
+  
+    // --- Slide 2: Content ---
+    let slide2 = pptx.addSlide();
+  
+    slide2.addText("Documentation Content", {
+      x: 1,
+      y: 0.5,
+      fontSize: 24,
+      bold: true,
+      color: "003366",
+    });
+  
+    // Background box with height = 6.25 inches (≈ 600px)
+    slide2.addShape(pptx.ShapeType.rect, {
+      x: 0.8,
+      y: 1.2,
+      w: 8.4,
+      h: 3.5,
+      fill: { color: "F5F5F5" },
+      line: { color: "DDDDDD" },
+      roundRadius: 8,
+    });
+  
+    // Content Text
+    slide2.addText(content, {
+      x: 1,
+      y: 1.4,
+      fontSize: 16,
+      color: "333333",
+      wrap: true,
+      w: 7.5,
+      h: 6,
+    });
+  
     pptx.writeFile("styled_presentation.pptx");
   };
-
+    
   //  Generate Poster (Screenshot of HTML)
   const generatePoster = () => {
     const element = document.getElementById("poster-content");
