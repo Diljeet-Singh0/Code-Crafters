@@ -16,12 +16,13 @@ function App() {
   // 📌 Generate PDF Report
   const generatePDF = () => {
     const doc = new jsPDF();
+    doc.text(`Title: ${title}`, 20, 70);
     doc.text(`Name: ${name}`, 20, 20);
     doc.text(`Branch: ${branch}`, 20, 30);
     doc.text(`Year: ${year}`, 20, 40);
     doc.text(`CRN: ${crn}`, 20, 50);
     doc.text(`URN: ${urn}`, 20, 60);
-    doc.text(`Title: ${title}`, 20, 70);
+
     doc.text("Content:", 20, 80);
     doc.text(content, 20, 90, { maxWidth: 170 });
     doc.save("report.pdf");
@@ -32,13 +33,12 @@ function App() {
   const generatePPTX = () => {
     let pptx = new PptxGenJS();
     let slide = pptx.addSlide();
-
+    slide.addText(`Title: ${title}`, { x: 0.5, y: 3, fontSize: 20, bold: true });
     slide.addText(`Name: ${name}`, { x: 0.5, y: 0.5, fontSize: 18 });
     slide.addText(`Branch: ${branch}`, { x: 0.5, y: 1, fontSize: 18 });
     slide.addText(`Year: ${year}`, { x: 0.5, y: 1.5, fontSize: 18 });
     slide.addText(`CRN: ${crn}`, { x: 0.5, y: 2, fontSize: 18 });
     slide.addText(`URN: ${urn}`, { x: 0.5, y: 2.5, fontSize: 18 });
-    slide.addText(`Title: ${title}`, { x: 0.5, y: 3, fontSize: 20, bold: true });
     slide.addText(content, { x: 0.5, y: 3.5, fontSize: 16, wrap: true });
 
     pptx.writeFile("presentation.pptx");
@@ -61,12 +61,12 @@ function App() {
   const generateExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet([
       {
+        Title: title,
         Name: name,
         Branch: branch,
         Year: year,
         CRN: crn,
         URN: urn,
-        Title: title,
         Content: content
       }
     ]);
@@ -79,12 +79,12 @@ function App() {
   // 📌 Generate JSON File
   const generateJSON = () => {
     const jsonData = {
+      title,
       name,
       branch,
       year,
       crn,
       urn,
-      title,
       content
     };
     const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: "application/json" });
