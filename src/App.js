@@ -13,40 +13,65 @@ function App() {
   const [crn, setCRN] = useState("");
   const [urn, setURN] = useState("");
 
+  // Function to reset all input fields
+  const resetFields = () => {
+    setTitle("");
+    setContent("");
+    setName("");
+    setBranch("");
+    setYear("");
+    setCRN("");
+    setURN("");
+  };
+
   // 📌 Generate PDF Report
   const generatePDF = () => {
     const doc = new jsPDF();
-    doc.text(`Name: ${name}`, 20, 20);
-    doc.text(`Branch: ${branch}`, 20, 30);
-    doc.text(`Year: ${year}`, 20, 40);
-    doc.text(`CRN: ${crn}`, 20, 50);
-    doc.text(`URN: ${urn}`, 20, 60);
-    doc.text(`Title: ${title}`, 20, 70);
-    doc.text("Content:", 20, 80);
-    doc.text(content, 20, 90, { maxWidth: 170 });
+    doc.setFontSize(20);
+    doc.text("Guru Nanak Dev Engineering College", 20, 20);
+    doc.setFontSize(12);
+    doc.text(`Name: ${name}`, 20, 40);
+    doc.text(`Branch: ${branch}`, 20, 50);
+    doc.text(`Year: ${year}`, 20, 60);
+    doc.text(`CRN: ${crn}`, 20, 70);
+    doc.text(`URN: ${urn}`, 20, 80);
+    doc.text(`Title: ${title}`, 20, 90);
+    doc.text("Content:", 20, 100);
+    doc.text(content, 20, 110, { maxWidth: 170 });
     doc.save("report.pdf");
   };
-
 
   // 📌 Generate PPTX Presentation
   const generatePPTX = () => {
     let pptx = new PptxGenJS();
     let slide = pptx.addSlide();
 
-    slide.addText(`Name: ${name}`, { x: 0.5, y: 0.5, fontSize: 18 });
-    slide.addText(`Branch: ${branch}`, { x: 0.5, y: 1, fontSize: 18 });
-    slide.addText(`Year: ${year}`, { x: 0.5, y: 1.5, fontSize: 18 });
-    slide.addText(`CRN: ${crn}`, { x: 0.5, y: 2, fontSize: 18 });
-    slide.addText(`URN: ${urn}`, { x: 0.5, y: 2.5, fontSize: 18 });
-    slide.addText(`Title: ${title}`, { x: 0.5, y: 3, fontSize: 20, bold: true });
-    slide.addText(content, { x: 0.5, y: 3.5, fontSize: 16, wrap: true });
+    slide.addText("Guru Nanak Dev Engineering College", { x: 0.5, y: 0.5, fontSize: 24, bold: true });
+    slide.addText(`Name: ${name}`, { x: 0.5, y: 1, fontSize: 18 });
+    slide.addText(`Branch: ${branch}`, { x: 0.5, y: 1.5, fontSize: 18 });
+    slide.addText(`Year: ${year}`, { x: 0.5, y: 2, fontSize: 18 });
+    slide.addText(`CRN: ${crn}`, { x: 0.5, y: 2.5, fontSize: 18 });
+    slide.addText(`URN: ${urn}`, { x: 0.5, y: 3, fontSize: 18 });
+    slide.addText(`Title: ${title}`, { x: 0.5, y: 3.5, fontSize: 20, bold: true });
+    slide.addText(content, { x: 0.5, y: 4, fontSize: 16, wrap: true });
 
     pptx.writeFile("presentation.pptx");
   };
 
   // 📌 Generate Poster (Screenshot of HTML)
   const generatePoster = () => {
-    const element = document.getElementById("poster-content"); // Capture entire form
+    const element = document.getElementById("poster-content");
+    
+    // Create a temporary heading element
+    const heading = document.createElement("h2");
+    heading.innerText = "Guru Nanak Dev Engineering College";
+    heading.style.fontSize = "24px";
+    heading.style.fontWeight = "bold";
+    heading.style.textAlign = "center";
+    
+    // Prepend the heading to the poster content
+    element.prepend(heading);
+
     html2canvas(element, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
@@ -54,6 +79,9 @@ function App() {
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
       pdf.save("poster.pdf");
+      
+      // Remove the heading after generating the poster
+      element.removeChild(heading);
     });
   };
 
@@ -75,12 +103,10 @@ function App() {
     XLSX.writeFile(workbook, "data.xlsx");
   };
 
-
   // 📌 Generate JSON File
   const generateJSON = () => {
     const jsonData = {
-      name,
-      branch,
+      name branch,
       year,
       crn,
       urn,
@@ -95,13 +121,12 @@ function App() {
     link.click();
   };
 
-
   return (
     <div className="App flex gap-4 flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <h1 className="text-2xl font-bold">One Source Documentation</h1>
 
       {/* Input Section */}
-      <div id="poster-content" className="flex flex-col gap-2 bg-white p-4 rounded shadow-md w-96">
+      <div id="poster-content" className="flex flex-col gap-2 bg-white p-4 rounded shadow-md w-96 border-2 border-gray-300">
         <input
           type="text"
           placeholder="Enter Title"
@@ -160,12 +185,10 @@ function App() {
         <button onClick={generatePoster} className="bg-yellow-500 text-white px-4 py-2 rounded">Generate Poster</button>
         <button onClick={generateExcel} className="bg-purple-500 text-white px-4 py-2 rounded">Generate Excel</button>
         <button onClick={generateJSON} className="bg-red-500 text-white px-4 py-2 rounded">Export as JSON</button>
+        <button onClick={resetFields} className="bg-gray-500 text-white px-4 py-2 rounded">Reset</button>
       </div>
     </div>
   );
-
-
-
 }
 
 export default App;
